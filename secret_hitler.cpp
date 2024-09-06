@@ -33,7 +33,7 @@ SH_game::SH_game()
     
 }
 
-SH_error_codes SH_game::add_player(std::string g_p_name)
+SH_error_code SH_game::add_player(std::string g_p_name)
 {
     if( sh_game_state_initializing == this->game_state )
     {
@@ -58,7 +58,7 @@ SH_error_codes SH_game::add_player(std::string g_p_name)
     }
 }
 
-SH_error_codes SH_game::remove_player(std::string g_p_name)
+SH_error_code SH_game::remove_player(std::string g_p_name)
 {
     if( sh_game_state_initializing == this->game_state )
     {
@@ -88,3 +88,24 @@ SH_error_codes SH_game::remove_player(std::string g_p_name)
         return sh_err_invalid_game_state;
     }
 }
+
+#ifdef TEST
+SH_error_code SH_game::print()
+{
+    cout<<"Card deck:"<<endl;
+    for(int i=0;i<default_policy_count; i++)
+    {
+    
+        cout<<this->policies[i]<<", ";
+    }
+    cout<<endl;
+
+    cout<<"Players:"<<endl;
+    for(int i=0;i<default_policy_count; i++)
+    {
+    
+        cout<<this->players[i]<<", ";
+    }
+    cout<<endl;
+}
+#endif

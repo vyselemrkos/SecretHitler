@@ -4,13 +4,13 @@
 #include <iostream>
 #include <vector>
 
-typedef enum SH_error_codes
+typedef enum SH_error_code
 {
     sh_err_not_initialized = -1,
     sh_err_no_error,
     sh_err_invalid_name,
     sh_err_invalid_game_state
-}SH_error_codes;
+}SH_error_code;
 
 typedef enum SH_party
 {
@@ -74,10 +74,14 @@ class SH_game
         SH_game();
 
         /* Add a player with given name */
-        SH_error_codes add_player(std::string);
+        SH_error_code add_player(std::string);
 
         /* Remove a player with given name*/
-        SH_error_codes remove_player(std::string);
+        SH_error_code remove_player(std::string);
+
+#ifdef TEST
+        SH_error_code print();
+#endif
 };
 
 
