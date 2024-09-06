@@ -2,42 +2,82 @@
 #define SECRET_HITLER_H
 
 #include <iostream>
+#include <vector>
+
+typedef enum SH_error_codes
+{
+    sh_err_not_initialized = -1,
+    sh_err_no_error,
+    sh_err_invalid_name,
+    sh_err_invalid_game_state
+}SH_error_codes;
+
+typedef enum SH_party
+{
+    sh_party_undefined = -1,
+    sh_party_liberal,
+    sh_party_faschist,
+    sh_party_max
+}SH_party;
 
 typedef enum SH_role
 {
-    sh_role_liberal = 0,
+    sh_role_undefined = -1,
+    sh_role_liberal,
     sh_role_faschist,
+    sh_role_Hitler,
     sh_role_max
 }SH_role;
 
-typedef enum SH_special_role
+typedef enum SH_game_state
 {
-    sh_special_role_liberal = 0,
-    sh_special_role_faschist,
-    sh_special_role_Hitler,
-    sh_special_role_max
-}SH_special_role;
+    sh_game_state_undefined = -1,
+    sh_game_state_initializing,
+    sh_game_state_select_president,
+    sh_game_state_select_chancellor,
+    sh_game_state_voting,
+    sh_game_state_max
+}SH_game_state;
 
 typedef enum SH_policy
 {
-    sh_policy_liberal = 0,
+    sh_policy_undefined = -1,
+    sh_policy_liberal,
     sh_policy_faschist,
     sh_policy_max
-}SH_special_role;
+}SH_policy;
 
-class SH_player
+typedef struct SH_player
 {
-    private:
-        SH_role p_role;
-        SH_special_role special_p_role;
-        std::string p_name;
-    public:
-        SH_player(std::string);
-};
+    /* Player Party */
+    SH_party p_party;
+    /* Player Role */
+    SH_role p_role;
+    /* Player Name */
+    std::string p_name;
+}SH_player;
 
 class SH_game
 {
+    private:
+        /* Game State */
+        SH_game_state game_state;
+        /* Players container */
+        std::vector<SH_player> players;
+        /* Policy Cards */
+        std::vector<SH_policy> policies;
+        /* Discarded Policy Cards */
+        std::vector<SH_policy> discarded_policies;
 
+    public:
+        /* Constructor */
+        SH_game();
+
+        /* Add a player with given name */
+        SH_error_codes add_player(std::string);
+
+        /* Remove a player with given name*/
+        SH_error_codes remove_player(std::string);
 };
 
 
