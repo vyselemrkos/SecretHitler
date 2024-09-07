@@ -1,4 +1,4 @@
-#define TEST
+
 #include "secret_hitler.hpp"
 
 int main()

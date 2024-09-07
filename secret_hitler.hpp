@@ -1,6 +1,8 @@
 #ifndef SECRET_HITLER_H
 #define SECRET_HITLER_H
 
+#define TEST
+
 #include <iostream>
 #include <vector>
 
@@ -80,7 +82,7 @@ class SH_game
         SH_error_code remove_player(std::string);
 
 #ifdef TEST
-        SH_error_code print();
+        void print();
 #endif
 };
 

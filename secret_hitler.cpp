@@ -90,22 +90,21 @@ SH_error_code SH_game::remove_player(std::string g_p_name)
 }
 
 #ifdef TEST
-SH_error_code SH_game::print()
+void SH_game::print()
 {
-    cout<<"Card deck:"<<endl;
+    std::cout<<"Card deck:"<<std::endl;
     for(int i=0;i<default_policy_count; i++)
     {
     
-        cout<<this->policies[i]<<", ";
+        std::cout<<this->policies[i]<<", ";
     }
-    cout<<endl;
+    std::cout<<std::endl;
 
-    cout<<"Players:"<<endl;
-    for(int i=0;i<default_policy_count; i++)
+    std::cout<<"Players:"<<std::endl;
+    for(int i=0;i<players.size(); i++)
     {
-    
-        cout<<this->players[i]<<", ";
+        std::cout << this->players[i].p_name <<", ";
     }
-    cout<<endl;
+    std::cout<<std::endl;
 }
 #endif
