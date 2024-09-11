@@ -5,13 +5,16 @@
 
 #include <iostream>
 #include <vector>
+#include <random>       // std::default_random_engine
+#include <chrono>       // std::chrono::system_clock
 
 typedef enum SH_error_code
 {
     sh_err_not_initialized = -1,
     sh_err_no_error,
     sh_err_invalid_name,
-    sh_err_invalid_game_state
+    sh_err_invalid_game_state,
+    sh_err_invalid_player_size  
 }SH_error_code;
 
 typedef enum SH_party
@@ -59,6 +62,8 @@ typedef struct SH_player
     std::string p_name;
 }SH_player;
 
+
+
 class SH_game
 {
     private:
@@ -70,7 +75,11 @@ class SH_game
         std::vector<SH_policy> policies;
         /* Discarded Policy Cards */
         std::vector<SH_policy> discarded_policies;
+        /* Current index of presidency. */
+        int current_president;
 
+        /* Random Engine */
+        std::default_random_engine random_seed;
     public:
         /* Constructor */
         SH_game();
@@ -80,6 +89,12 @@ class SH_game
 
         /* Remove a player with given name*/
         SH_error_code remove_player(std::string);
+
+        ///* Start Game - With given player order. Return Faschist and Liberal players. */
+        //SH_error_code start_game(std::vector<std::string>, std::vector<std::string>, std::vector<std::string>);
+                
+        /* Start Game - In random order. Return Faschist and Liberal players. */
+        SH_error_code start_game(std::vector<std::string>*, std::vector<std::string>*);
 
 #ifdef TEST
         void print();

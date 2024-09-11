@@ -1,7 +1,7 @@
 #include "secret_hitler.hpp"
 
 #include <algorithm>
-#include <random>
+#include <numeric>
 
 #define default_faschist_policy 11
 #define default_liberal_policy 6
@@ -25,8 +25,10 @@ SH_game::SH_game()
     this->players.clear();
     
     /* Shuffle policy cards. */
-    auto rng = std::default_random_engine {};
-    std::shuffle(this->policies.begin(), this->policies.end(), rng);
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine e(seed);
+    this->random_seed=e;
+    std::shuffle(this->policies.begin(), this->policies.end(), this->random_seed);
 
     /* Initialize game state */
     this->game_state = sh_game_state_initializing;
@@ -87,6 +89,74 @@ SH_error_code SH_game::remove_player(std::string g_p_name)
     {
         return sh_err_invalid_game_state;
     }
+}
+
+static void calc_players(int player_count, int * fasc, int * lib)
+{
+    if(0 == player_count % 2)
+    {
+        *fasc = (player_count / 2) - 1;
+        *lib = player_count - *fasc; 
+    }
+    else if (1 == player_count % 2)
+    {
+        *fasc = (player_count / 2);
+        *lib = player_count - *fasc; 
+    }
+}
+
+SH_error_code SH_game::start_game(std::vector<std::string>* ret_fasc, std::vector<std::string>* ret_lib)
+{
+    SH_error_code return_value;
+    if( sh_game_state_initializing == this->game_state )
+    {
+        if(4 < this->players.size() && 11 > this->players.size())
+        {
+            /* select faschists and liberals */
+            int lib_count, fasc_count;
+            calc_players(this->players.size(), &lib_count, &fasc_count);
+
+            std::vector<int> rand_player_index(this->players.size());
+            iota(rand_player_index.begin(), rand_player_index.end(), 0);
+
+            std::shuffle(rand_player_index.begin(), rand_player_index.end(), this->random_seed);
+
+            //first one is Hitler, other <fasc_count - 1> ones are faschists and other <lib_count> ones are liberals
+            for( int i = 0; i < this->players.size(); i++)
+            {
+                if (0 == i)
+                {
+                    this->players[rand_player_index[i]].p_party=sh_party_faschist;
+                    this->players[rand_player_index[i]].p_role=sh_role_Hitler;
+                    ret_fasc->push_back(this->players[rand_player_index[i]].p_name);
+                }
+                else if(0 < i && fasc_count>i)
+                {
+                    this->players[rand_player_index[i]].p_party=sh_party_faschist;
+                    this->players[rand_player_index[i]].p_role=sh_role_faschist;
+                    ret_fasc->push_back(this->players[rand_player_index[i]].p_name);
+                }
+                else
+                {
+                    this->players[rand_player_index[i]].p_party=sh_party_liberal;
+                    this->players[rand_player_index[i]].p_role=sh_role_liberal;
+                    ret_lib->push_back(this->players[rand_player_index[i]].p_name);
+                }
+            }
+            this->current_president=0;
+            game_state = sh_game_state_select_chancellor;
+           
+        }
+        else
+        {
+            return_value = sh_err_invalid_player_size;
+        }
+    }
+    else
+    {
+        return_value = sh_err_invalid_game_state;
+    }
+    return return_value;
 }
 
 #ifdef TEST
