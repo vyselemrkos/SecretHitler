@@ -165,7 +165,6 @@ void SH_game::print()
     std::cout<<"Card deck:"<<std::endl;
     for(int i=0;i<default_policy_count; i++)
     {
-    
         std::cout<<this->policies[i]<<", ";
     }
     std::cout<<std::endl;
