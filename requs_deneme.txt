@@ -1,0 +1,51 @@
+1. This software is an automated chatbot that will allow users to play Secret Hitler game on Telegram.
+2. This software is called Secret Hitler Bot.
+3. Secret Hitler Bot game logic shall run on a C++ project.
+3. Secret Hitler Bot shall use a Python API that will allow the communication between Telegram and the game logic that runs on C++ project.
+4. Secret Hitler Bot Python API shall read the incoming messages from a Telegram group. 
+5. Secret Hitler Bot shall be added to a Telegram group chat.
+6. Secret Hitler Bot Python API shall have two types of privileges and all privileges shall be defined each API by API.
+7. Secret Hitler Bot Python API shall have an "admin" privilege that will be automatically assigned to the admin of the current chat group on Telegram.
+8. Secret Hitler Bot Python API shall have a "default_user" privilege that will be automatically assigned to every other users than the admins of the current chat group on Telegram.
+9. Secret Hitler Bot game logic shall have a game state that will defined as one of the following: "sh_game_state_initializing", "sh_game_state_select_president", "sh_game_state_select_chancellor", "sh_game_state_voting", "sh_game_state_president_discarding", "sh_game_state_chancellor_discarding", "sh_game_state_president_killing", "sh_game_state_liberal_win", "sh_game_state_faschist_win".
+9. Secret Hitler Bot game logic shall have a player status that will be defined as one of the following: "sh_player_status_active", "sh_player_status_pasive".
+23. Secret Hitler Bot game logic shall have a current president index field that will hold the index of the user which is the current president.
+24. Secret Hitler Bot game logic shall have a current chancellor index field that will hold the index of the user which is the current chancellor.
+24. Secret Hitler Bot game logic shall have a chancellor candidate index field that will hold the index of the user which is the chancellor candidate.
+24. Secret Hitler Bot game logic shall have a bypass count field that will hold the count of how many times the chancellor election is bypassed.
+26. Secret Hitler Bot game logic shall have two policy types defined as "sh_policy_liberal" and "sh_policy_faschist".
+25. Secret Hitler Bot game logic shall have a policies on the board vector.
+25. Secret Hitler Bot game logic shall have a discarded policies vector.
+25. Secret Hitler Bot game logic shall have a policy deck vector.
+25. Secret Hitler Bot game logic shall have a policy deck vector that contains exactly 17 policies, where exactly 11 of them being "sh_policy_faschist" and remaining 6 of them being "sh_policy_liberal" initially.
+9. Secret Hitler Bot game logic shall set the game state "sh_game_state_initializing" initially.
+9. Secret Hitler Bot game logic shall set the current chancellor index to -1 when the state is equal to "sh_game_state_initializing".
+9. Secret Hitler Bot game logic shall set the current president index to -1 when the state is equal to "sh_game_state_initializing".
+9. Secret Hitler Bot game logic shall set the candidate chancellor index to -1 when the state is equal to "sh_game_state_initializing".
+9. Secret Hitler Bot game logic shall set the bypass count to 0 when the state is equal to "sh_game_state_initializing".
+9. Secret Hitler Bot Python API shall have "\add_player @player_name" command to add a new player to the game and this command shall be used by the people that have the "admin" privilege when the game logic has a game state that is equal to "sh_game_state_initializing".
+10. Secret Hitler Bot Python API shall have "\add_me" command that will allow users to add themselves to the game and this command shall be used by the people that have the "admin" and "default_users" privileges when the game logic has a game state that is equal to "sh_game_state_initializing".
+11. Secret Hitler Bot Python API shall have "\remove_player @player_name" command to remove an existing player from the game and this command shall be used by the people that have the "admin" privilege when the game logic has a game state that is equal to "sh_game_state_initializing".
+12. Secret Hitler Bot Python API shall have "\remove_me" command that will allow users to remove themselves from the game and this command shall be used by the people that have the "admin" and "default_users" privileges when the game logic has a game state that is equal to "sh_game_state_initializing".
+13. Secret Hitler Bot Python API shall have "\start_game" command to start the game and this command shall be used by the people that have the "admin" privilege when the game logic has a game state that is equal to "sh_game_state_initializing" and the player count is between 5 and 10.
+16. Secret Hitler Bot game logic shall have two types of player party, "sh_party_liberal" and "sh_party_faschist". 
+16. Secret Hitler Bot game logic shall have three types of player role, "sh_role_liberal", "sh_role_faschist" and "sh_role_Hitler". 
+17. Secret Hitler Bot game logic shall have 3 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 1 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 5.
+18. Secret Hitler Bot game logic shall have 4 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 1 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 6.
+19. Secret Hitler Bot game logic shall have 4 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 2 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 7.
+20. Secret Hitler Bot game logic shall have 5 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 2 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 8.
+21. Secret Hitler Bot game logic shall have 5 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 3 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 9.
+22. Secret Hitler Bot game logic shall have 6 players that belongs to "sh_party_liberal" party and "sh_role_liberal" role, 3 player that belongs to "sh_party_faschist" party and "sh_role_faschist" role, and finally 1 player that belongs to "sh_party_faschist" party and "sh_role_Hitler" role when player count is equal to 10.
+9. When "\start_game" command is received, Secret Hitler Bot game logic shall shuffle the added players, assign each player a party and a role, set the presidency index to a random player index, set each players state to "sh_player_status_active", shuffle the policy vector and set the game state "sh_game_state_select_chancellor".
+10. Secret Hitler Bot Python API shall have "\select_chancellor @player_name" command to start voting to select the "@player_name" as chancellor when the game state is equal to "sh_game_state_select_chancellor" and this command shall be used by the player that is the current president only. 
+11. If the command "\select_chancellor @player_name" is used by another player other than the current president, Secret Hitler Bot Python API shall warn the group chat and do nothing.
+12. Secret Hitler Bot game logic shall set the game state to "sh_game_state_voting" and the candidate chancellor index field to index of "@player_name" after successful receiving of the command "\select_chancellor @player_name".
+13. Secret Hitler Bot Python API shall have "\vote JA!" and "\vote NEIN!" commands when the game state is equal to "sh_game_state_voting".
+14. When the game state is equal to "sh_game_state_voting", each player that has a state "sh_player_status_active" has one right to use "\vote JA!" and "\vote NEIN!" commands.
+15. After each player votes with the "\vote JA!" and "\vote NEIN!" commands, the game logic shall count the votes, if the "\vote JA!" command counts greater than "\vote NEIN!" commands the game state shall be set as "sh_game_state_president_discarding", if the "\vote JA!" command counts are less than or equal to "\vote NEIN!" command counts, the game state shall be set as "sh_game_state_select_chancellor" and increment the bypass count by 1.
+16. If the bypass count reaches to 3, the last element of the policy deck should be popped and add should be added to policies on the board vector. // buraya win conditionları ekle.
+17. when the game state is in the "sh_game_state_president_discarding", Secret Hitler Bot game logic should pop the last three policies, create a private chat to the user that is the current president and asks which policy card to discard. (Ex. policies are Faschist, Faschist and Liberal. Which one do you want to discard?)
+18. Secret Hitler Bot Python API shall provide "\discard <policy>" command to answer the question asked previously and discard the selected policy. 
+19. When the command "\discard <policy>" is used, Secret Hitler Bot game logic shall push the selected <policy> to discarded policies vector, and set the game state "sh_game_state_chancellor_discarding".
+17. when the game state is in the "sh_game_state_chancellor_discarding", Secret Hitler Bot game logic shall create a private chat to the user that is the current chancellor and asks which one policy card to discard where the chancellor shall select a policy between the remaining two policies.
+19. Secret Hitler Bot game logic has a field that holds the current board status which has the count of the enacted fascist laws, the count of enacted liberal laws.

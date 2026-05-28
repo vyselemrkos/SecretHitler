@@ -3,103 +3,75 @@
 
 #define TEST
 
+#include "secret_hitler_utils.hpp"
+#include "secret_hitler_board.hpp"
 #include <iostream>
 #include <vector>
-#include <random>       // std::default_random_engine
-#include <chrono>       // std::chrono::system_clock
-
-typedef enum SH_error_code
-{
-    sh_err_not_initialized = -1,
-    sh_err_no_error,
-    sh_err_invalid_name,
-    sh_err_invalid_game_state,
-    sh_err_invalid_player_size  
-}SH_error_code;
-
-typedef enum SH_party
-{
-    sh_party_undefined = -1,
-    sh_party_liberal,
-    sh_party_faschist,
-    sh_party_max
-}SH_party;
-
-typedef enum SH_role
-{
-    sh_role_undefined = -1,
-    sh_role_liberal,
-    sh_role_faschist,
-    sh_role_Hitler,
-    sh_role_max
-}SH_role;
-
-typedef enum SH_game_state
-{
-    sh_game_state_undefined = -1,
-    sh_game_state_initializing,
-    sh_game_state_select_president,
-    sh_game_state_select_chancellor,
-    sh_game_state_voting,
-    sh_game_state_max
-}SH_game_state;
-
-typedef enum SH_policy
-{
-    sh_policy_undefined = -1,
-    sh_policy_liberal,
-    sh_policy_faschist,
-    sh_policy_max
-}SH_policy;
+#include <random>
+#include <chrono>
 
 typedef struct SH_player
 {
-    /* Player Party */
     SH_party p_party;
-    /* Player Role */
     SH_role p_role;
-    /* Player Name */
     std::string p_name;
+    SH_player_status p_status;
 }SH_player;
-
-
 
 class SH_game
 {
     private:
-        /* Game State */
         SH_game_state game_state;
-        /* Players container */
         std::vector<SH_player> players;
-        /* Policy Cards */
-        std::vector<SH_policy> policies;
-        /* Discarded Policy Cards */
+        std::vector<SH_policy> policy_deck;
+        std::vector<SH_policy> policy_deck_on_the_board;
         std::vector<SH_policy> discarded_policies;
-        /* Current index of presidency. */
+        std::vector<SH_policy> drawn_policies;
+        std::vector<int> player_votes;   // -1=not voted, 0=NEIN, 1=JA
         int current_president;
-
-        /* Random Engine */
+        int current_chancellor;
+        int chancellor_candidate;
+        int bypass_count;
+        SH_board* board;
         std::default_random_engine random_seed;
+
+        int find_player(const std::string& name) const;
+        void draw_policies(int count);
+        void advance_president();
+        void auto_enact_top_policy();
+
     public:
-        /* Constructor */
         SH_game();
+        ~SH_game();
 
-        /* Add a player with given name */
         SH_error_code add_player(std::string);
-
-        /* Remove a player with given name*/
         SH_error_code remove_player(std::string);
-
-        ///* Start Game - With given player order. Return Faschist and Liberal players. */
-        //SH_error_code start_game(std::vector<std::string>, std::vector<std::string>, std::vector<std::string>);
-                
-        /* Start Game - In random order. Return Faschist and Liberal players. */
         SH_error_code start_game(std::vector<std::string>*, std::vector<std::string>*);
+        SH_error_code select_chancellor(std::string president_name, std::string chancellor_name);
+        SH_error_code cast_vote(std::string player_name, bool vote_ja);
+        SH_error_code president_discard(std::string president_name, SH_policy policy);
+        SH_error_code chancellor_discard(std::string chancellor_name, SH_policy policy);
+        void game_state_next();
+
+        int get_player_count() const;
+        const char* get_player_name(int index) const;
+        int get_player_role(int index) const;
+        int get_player_status(int index) const;
+        int get_player_vote(int index) const;
+        int get_game_state() const;
+        int get_current_president() const;
+        int get_current_chancellor() const;
+        int get_chancellor_candidate() const;
+        int get_bypass_count() const;
+        int get_drawn_policy_count() const;
+        int get_drawn_policy(int index) const;
+        int get_fascist_policy_count() const;
+        int get_liberal_policy_count() const;
+        bool is_hitler_zone() const;
 
 #ifdef TEST
         void print();
 #endif
 };
-
 
 #endif /*SECRET_HITLER_H*/
